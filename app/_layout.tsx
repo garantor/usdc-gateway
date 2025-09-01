@@ -24,7 +24,7 @@ export default function RootLayout() {
     <>
     
       <IconRegistry icons={EvaIconsPack} />
-    <ApplicationProvider {...eva} theme={eva.dark}>
+    <ApplicationProvider {...eva} theme={eva.light}>
 
       <Stack screenOptions={{headerShown:false}} />
       <StatusBar style="auto" />

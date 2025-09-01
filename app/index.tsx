@@ -1,6 +1,6 @@
 import { ThemedText } from '@/components/ThemedText'
 import { ThemedView } from '@/components/ThemedView'
-import React from 'react'
+import React, { useEffect } from 'react'
 import FontAwesome5 from '@expo/vector-icons/FontAwesome5'
 import { GenericIconButton } from '@/components/GenericButton'
 import { useTheme } from '@ui-kitten/components'
@@ -8,35 +8,64 @@ import { useCreateMnemonic } from '@/hooks/useCreateKeypair'
 import { BalanceCard } from '@/components/ui/BalanceCard'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useRouter } from 'expo-router'
+import { LoadingModal } from '@/components/ui/isLoading'
+import { LOCAL_STORAGE_KEY } from '@/config'
 
 
 console.log('PUBLIC_EXPORT_ALCHEMY_API_KEY ', process.env.EXPO_PUBLIC_ALCHEMY_API_KEY)
 export default function Gateway() {
     const theme = useTheme()
-    const [loading, setLoading] = React.useState(false)
+    const [loading, setLoading] = React.useState(true)
     const { encryptMnemonic, decryptMnemonic } = useCreateMnemonic()
-    const { getItem, setItem } = useLocalStorage('USDC-Gateway')
+    const { getItem, setItem } = useLocalStorage(LOCAL_STORAGE_KEY)
     let router = useRouter()
+    const [address, setAddress] = React.useState('')
+
+
+
+    useEffect(() => {
+        console.log('Effect ran')
+        let data = JSON.parse(getItem())
+
+        console.log('the date ', data)
+
+        if (data !== null ) {
+            let address = JSON.parse(data.mnemonic).address
+            console.log('Data from storage: ', address)
+            console.log('Found existing data, navigating to gateway...')
+            setAddress('0x' + address)
+        }
+        setLoading(false)
+
+    }, [])
+
+    useEffect(() => {
+        if (address) {
+            console.log('Found existing address, navigating to gateway...')
+            router.push({
+                pathname: '/gateway',
+                params: { address }
+            })
+        }
+    }, [address])
 
     async function handleSecureSignUp() {
         setLoading(true)
-       
+
         console.log("Starting secure authentication...")
         let encryptedMnemonic = await encryptMnemonic("testpassword")
         console.log('mnemonic ', encryptedMnemonic)
         setItem(JSON.stringify({ mnemonic: encryptedMnemonic }))
+        setAddress('0x' + JSON.parse(encryptedMnemonic)?.address)
         setLoading(false)
-       
-        router.push({
-            pathname: '/gateway',
-            params: { address: '0x' + JSON.parse(encryptedMnemonic)?.address }
-        })
+
+
 
 
     }
 
 
-   
+
 
     return (
         <ThemedView style={{
@@ -99,7 +128,7 @@ export default function Gateway() {
                     icon={<FontAwesome5 name="sign-in-alt" size={22} color={theme['text-control-color']} />}
                     title='Login with Passkey'
                     loading={loading}
-                    onPress={() => {}}
+                    onPress={() => { }}
 
                 />
                 <ThemedText style={{
@@ -112,18 +141,12 @@ export default function Gateway() {
                 </ThemedText>
             </ThemedView>
 
-            {/* <BalanceCard
-                walletAddress="0x1234...abcd"
-                network="Ethereum Mainnet"
-                balance="1,250.00"
-                tokenSymbol="USDC"
-                // avatarUrl="https://i.pravatar.cc/48?u=wallet"
-                // extraInfo={
-                //     <ThemedText type="subtitle" style={{ color: '#4caf50' }}>
-                //         Verified Account
-                //     </ThemedText>
-                // }
-            /> */}
+            <LoadingModal
+                visible={loading}
+                onClose={() => setLoading(false)}
+                header="Processing..."
+                body="Please wait while we process your request."
+            />
         </ThemedView>
     )
 }

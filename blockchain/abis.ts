@@ -1,21 +1,45 @@
-export const erc20BalanceAbi = [
+import { erc20Abi } from "viem";
+
+export const erc20BalanceAbi = erc20Abi;
+
+export const gatewayWalletAbi = [
     {
-        "constant": true,
-        "inputs": [
+        type: "function",
+        name: "deposit",
+        inputs: [
             {
-                "name": "_owner",
-                "type": "address"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
+                name: "token",
+                type: "address",
+                internalType: "address",
+            },
             {
-                "name": "balance",
-                "type": "uint256"
-            }
+                name: "value",
+                type: "uint256",
+                internalType: "uint256",
+            },
         ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    }
-] as const;
+        outputs: [],
+        stateMutability: "nonpayable",
+    },
+];
+
+export const unifiedWalletAbi = [
+    {
+        type: "function",
+        name: "gatewayMint",
+        inputs: [
+            {
+                name: "attestationPayload",
+                type: "bytes",
+                internalType: "bytes",
+            },
+            {
+                name: "signature",
+                type: "bytes",
+                internalType: "bytes",
+            },
+        ],
+        outputs: [],
+        stateMutability: "nonpayable",
+    },
+];

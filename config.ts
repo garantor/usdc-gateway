@@ -12,16 +12,17 @@ export async function getSupportedEvmChains(address: string) {
 
     const chains = [
         {
-            network: 'Ethereum Sepolia',
+            network: 'sepolia',
             rpcUrl: `https://eth-sepolia.g.alchemy.com/v2/${apiKey}`,
             walletAddress: address,
             tokenSymbol: 'USDC',
             decimal: 6,
             avatarUrl: 'https://i.pravatar.cc/48?u=wallet1',
             tokenAddress: USDC_ADDRESSES['Ethereum Sepolia'],
+            
         },
         {
-            network: 'Avalanche Fuji',
+            network: 'avalancheFuji',
             rpcUrl: `https://avax-fuji.g.alchemy.com/v2/${apiKey}`,
             walletAddress: address,
             tokenSymbol: 'USDC',
@@ -30,7 +31,7 @@ export async function getSupportedEvmChains(address: string) {
             tokenAddress: USDC_ADDRESSES['Avalanche Fuji'],
         },
         {
-            network: 'Base Sepolia',
+            network: 'baseSepolia',
             rpcUrl: `https://base-sepolia.g.alchemy.com/v2/${apiKey}`,
             walletAddress: address,
             tokenSymbol: 'USDC',
@@ -55,3 +56,5 @@ export async function getSupportedEvmChains(address: string) {
 
     return chainsWithBalance
 }
+
+export const LOCAL_STORAGE_KEY = 'USDC-Gateway'

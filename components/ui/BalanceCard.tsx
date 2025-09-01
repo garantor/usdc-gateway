@@ -1,8 +1,13 @@
 import React from "react";
-import { StyleSheet, View, Image } from "react-native";
+import { StyleSheet, View, Image, TouchableOpacity } from "react-native";
 import { ThemedView } from "../ThemedView";
 import { ThemedText } from "../ThemedText";
 import { useTheme } from "@ui-kitten/components";
+import AntDesign from '@expo/vector-icons/AntDesign';
+// Simple copy icon SVG
+const CopyIcon = ({ color = "#888", size = 30 }) => (
+    <AntDesign name="copy1" size={size} color={color} />
+);
 
 type BalanceCardProps = {
     walletAddress: string;
@@ -23,6 +28,12 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
 }) => {
     const theme = useTheme();
 
+    const handleCopy = () => {
+        if (navigator?.clipboard) {
+            navigator.clipboard.writeText(walletAddress);
+        }
+    };
+
     return (
         <ThemedView
             style={[
@@ -38,13 +49,13 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
                 {avatarUrl && (
                     <Image source={{ uri: avatarUrl }} style={styles.avatar} />
                 )}
-                <View style={styles.info}>
-                    <ThemedText type="defaultSemiBold" numberOfLines={1} style={{ color: theme['text-basic-color'] }}>
-                        {walletAddress}
-                    </ThemedText>
-                    <ThemedText type="subtitle" style={[styles.network, { color: theme['text-hint-color'] }]}>
-                        {network}
-                    </ThemedText>
+                <View style={styles.infoRow}>
+                    <View style={styles.info}>
+                        <ThemedText type="subtitle" style={[styles.network, { color: theme['text-hint-color'] }]}>
+                            {network}
+                        </ThemedText>
+                    </View>
+              
                 </View>
             </View>
             <View style={styles.balanceRow}>
@@ -60,6 +71,7 @@ export const BalanceCard: React.FC<BalanceCardProps> = ({
 
 const styles = StyleSheet.create({
     card: {
+        alignSelf: 'center',
         borderRadius: 16,
         padding: 20,
         margin: 8,
@@ -67,6 +79,7 @@ const styles = StyleSheet.create({
         shadowRadius: 8,
         elevation: 2,
         minWidth: 300,
+        maxWidth: 400,
     },
     header: {
         flexDirection: "row",
@@ -79,9 +92,21 @@ const styles = StyleSheet.create({
         borderRadius: 24,
         marginRight: 16,
     },
+    infoRow: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+    },
     info: {
         flex: 1,
         justifyContent: "center",
+    },
+    copyIcon: {
+        marginLeft: 8,
+        cursor: 'pointer',
+        padding: 4,
+        borderRadius: 4,
+        transition: 'background 0.2s',
     },
     network: {
         fontSize: 14,
@@ -89,8 +114,9 @@ const styles = StyleSheet.create({
     },
     balanceRow: {
         flexDirection: "row",
-        alignItems: "flex-end",
+        alignItems: "center",
         marginBottom: 12,
+        justifyContent:'center'
     },
     tokenSymbol: {
         marginLeft: 8,
