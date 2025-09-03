@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { Layout, LayoutProps } from '@ui-kitten/components';
 
 import { useThemeColor } from '@/hooks/useThemeColor';

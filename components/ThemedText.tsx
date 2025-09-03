@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { StyleSheet} from 'react-native';
 import { Text, TextProps } from '@ui-kitten/components';
 

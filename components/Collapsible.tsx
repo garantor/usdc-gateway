@@ -1,4 +1,6 @@
-import { PropsWithChildren, useState } from 'react';
+import React from 'react';
+
+import { PropsWithChildren, useState,  } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
 import { ThemedText } from '@/components/ThemedText';

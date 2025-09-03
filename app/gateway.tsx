@@ -13,6 +13,8 @@ import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useCreateMnemonic } from '@/hooks/useCreateKeypair'
 import * as chainsConfig from 'viem/chains'
 import { createAvalancheDeposit, signTransactionTx } from '@/blockchain/intents'
+import { sendSmartAccountTransactions } from '@/blockchain/zerodevSmartAcct'
+import { parseEther } from 'viem'
 
 
 
@@ -63,7 +65,11 @@ export default function Gateway() {
         let mnemonic = await decryptMnemonic(JSON.parse(getItem()).mnemonic, 'testpassword')
         console.log('the mnemonic is:', mnemonic, mnemonic?.mnemonic?.phrase, sourceChain)
 
-        // let walletPri = 
+        let zerodevAccount = await sendSmartAccountTransactions(mnemonic?.mnemonic?.phrase, wallets[0].rpcUrl, sourceChain, toChainConfig.walletAddress, parseEther('0.00001'), '0x')
+
+        console.log('the zerodevAccount is:', zerodevAccount)
+
+            // let walletPri = 
         // let gateWayTx = await depositToGateWay(mnemonic?.mnemonic?.phrase, sourceChain, wallets[0].rpcUrl)
         // console.log('the deposit recipt ', gateWayTx)
         // let intents = await signTransactionTx(mnemonic?.mnemonic?.phrase)
@@ -73,8 +79,8 @@ export default function Gateway() {
         // console.log('the req ', req)
         // Implement the logic to send the transaction
 
-        let destiDeposit = await createAvalancheDeposit(mnemonic?.mnemonic?.phrase, wallets[0].rpcUrl);
-        console.log('the destiDeposit ', destiDeposit)
+        // let destiDeposit = await createAvalancheDeposit(mnemonic?.mnemonic?.phrase, wallets[0].rpcUrl);
+        // console.log('the destiDeposit ', destiDeposit)
     }
 
     return (
