@@ -8,11 +8,11 @@ import { getSupportedEvmChains, LOCAL_STORAGE_KEY } from '@/config'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 import { SelectItem } from '@/components/SelectItem'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { createUnifiedDepositIntent, depositToGateWay, sendUnifiedTransferToCircle } from '@/blockchain/utils'
+import {  depositToGateWay } from '@/blockchain/utils'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useCreateMnemonic } from '@/hooks/useCreateKeypair'
 import * as chainsConfig from 'viem/chains'
-import { createAvalancheDeposit, signTransactionTx } from '@/blockchain/intents'
+import { createAvalancheDeposit } from '@/blockchain/circleIntent'
 
 
 
@@ -73,7 +73,9 @@ export default function Gateway() {
         // console.log('the req ', req)
         // Implement the logic to send the transaction
 
-        let destiDeposit = await createAvalancheDeposit(mnemonic?.mnemonic?.phrase, wallets[0].rpcUrl);
+        console.log('the rpc url ', wallets, wallets[0].rpcUrl)  
+
+        let destiDeposit = await createAvalancheDeposit(mnemonic?.mnemonic?.phrase, wallets[1].rpcUrl);
         console.log('the destiDeposit ', destiDeposit)
     }
 

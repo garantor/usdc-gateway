@@ -22,15 +22,6 @@ export async function getSupportedEvmChains(address: string) {
             
         },
         {
-            network: 'avalancheFuji',
-            rpcUrl: `https://avax-fuji.g.alchemy.com/v2/${apiKey}`,
-            walletAddress: address,
-            tokenSymbol: 'USDC',
-            decimal: 6,
-            avatarUrl: 'https://i.pravatar.cc/48?u=wallet2',
-            tokenAddress: USDC_ADDRESSES['Avalanche Fuji'],
-        },
-        {
             network: 'baseSepolia',
             rpcUrl: `https://base-sepolia.g.alchemy.com/v2/${apiKey}`,
             walletAddress: address,

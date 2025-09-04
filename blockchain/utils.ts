@@ -1,7 +1,7 @@
 import { Chain, createPublicClient, erc20Abi, getContract, http, createWalletClient, publicActions, maxUint256, zeroAddress } from 'viem'
 import { mainnet } from 'viem/chains'
 import { erc20BalanceAbi, gatewayWalletAbi } from './abis'
-import { privateKeyToAccount, mnemonicToAccount } from 'viem/accounts'
+import {  mnemonicToAccount } from 'viem/accounts'
 import { pad } from "viem";
 
 
