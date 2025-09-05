@@ -8,11 +8,10 @@ import { getSupportedEvmChains, LOCAL_STORAGE_KEY } from '@/config'
 import { TouchableOpacity, StyleSheet } from 'react-native'
 import { SelectItem } from '@/components/SelectItem'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import {  depositToGateWay } from '@/blockchain/utils'
 import { useLocalStorage } from '@/hooks/useLocalStorage'
 import { useCreateMnemonic } from '@/hooks/useCreateKeypair'
 import * as chainsConfig from 'viem/chains'
-import { createAvalancheDeposit } from '@/blockchain/circleIntent'
+import CircleGatewayTransaction  from '@/blockchain/circleIntent'
 
 
 
@@ -63,20 +62,22 @@ export default function Gateway() {
         let mnemonic = await decryptMnemonic(JSON.parse(getItem()).mnemonic, 'testpassword')
         console.log('the mnemonic is:', mnemonic, mnemonic?.mnemonic?.phrase, sourceChain)
 
-        // let walletPri = 
-        // let gateWayTx = await depositToGateWay(mnemonic?.mnemonic?.phrase, sourceChain, wallets[0].rpcUrl)
-        // console.log('the deposit recipt ', gateWayTx)
-        // let intents = await signTransactionTx(mnemonic?.mnemonic?.phrase)
-        // let intents = await createUnifiedDepositIntent(mnemonic?.mnemonic?.phrase, address, address, sourceChain, sourceChain?.rpcUrl, 5_000000n)
-        // console.log('the intents ', intents)
-        // let req = await sendUnifiedTransferToCircle(intents)
-        // console.log('the req ', req)
-        // Implement the logic to send the transaction
+        let circleGateway = new CircleGatewayTransaction(wallets[0].rpcUrl, wallets[1].rpcUrl)
+        console.log('instnace created ..... ')
 
-        console.log('the rpc url ', wallets, wallets[0].rpcUrl)  
+        // let deposit = await circleGateway.createGateWayDeposit(mnemonic?.mnemonic?.phrase, 5_000000n, fromChainConfig.chain, '0x1c7D4B196Cb0C7B01d743Fbc6116a902379C7238' )
+        // console.log('the reg ', deposit)
 
-        let destiDeposit = await createAvalancheDeposit(mnemonic?.mnemonic?.phrase, wallets[1].rpcUrl);
-        console.log('the destiDeposit ', destiDeposit)
+        try {
+            let circleTx = await circleGateway.destinationChainDeposit(mnemonic?.mnemonic?.phrase, 0, 6, toChainConfig.chain, 5_000000n,)
+            console.log('the circle tx is ', circleTx)  
+        } catch (error) {
+            console.error('Error sending Circle transaction:', error)
+            window.alert('Error sending Circle transaction: ' + (error as Error).message);
+        }
+        
+
+
     }
 
     return (
